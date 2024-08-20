@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facial Login</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: #333;
+        }
+
+        p {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        .camera-container {
+            position: relative;
+            width: 100%;
+            padding-top: 75%;
+            /* 4:3 aspect ratio */
+            background-color: #000;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .message {
+            margin-top: 20px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .error {
+            color: #d9534f;
+        }
+
+        .success {
+            color: #5cb85c
+        }
+
+        .register-link {
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        .register-link a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Facial Login</h1>
+        <div class="camera-container">
+            <video id="video" autoplay></video>
+        </div>
+        <button id="captureButton">Capture Photo</button>
+        <canvas id="canvas" style="display:none;"></canvas>
+        <div id="message" class="message"></div>
+
+        <form id="facialLoginForm" method="POST" enctype="multipart/form-data" style="display:none;">
+            {% csrf_token %}
+            <input type="file" name="image" id="capturedImage">
+        </form>
+
+
+        <div class="register-link">
+            Don't have an account? <a href="{% url 'register' %}">Register here</a>
+        </div>
+    </div>
+
+    <script>
+        // Access the camera
+        const video = document.getElementById('video');
+        const captureButton = document.getElementById('captureButton');
+        const canvas = document.getElementById('canvas');
+        const context = canvas.getContext('2d');
+        const messageDiv = document.getElementById('message');
+        const form = document.getElementById('facialLoginForm');
+        const capturedImage = document.getElementById('capturedImage');
+
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then((stream) => {
+                video.srcObject = stream;
+            })
+            .catch((err) => {
+                console.error("Error accessing the camera: " + err);
+                messageDiv.textContent = "Error accessing the camera.";
+                messageDiv.className = "message error";
+                messageDiv.style.display = 'block';
+            });
+
+        captureButton.addEventListener('click', () => {
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            canvas.toBlob((blob) => {
+                const file = new File([blob], "captured.jpg", { type: "image/jpg" });
+                const dataTransfer = new DataTransfer();
+                dataTransfer.items.add(file);
+                capturedImage.files = dataTransfer.files;
+
+                // Automatically submit the form
+                form.submit();
+            }, 'image/jpg');
+        });
+    </script>
+</body>
+
+</html>

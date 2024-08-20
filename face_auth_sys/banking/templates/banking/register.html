@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="email"],
+        .form-group input[type="password"],
+        .form-group input[type="file"] {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+
+        .form-group input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .form-group input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        /* Basic styles for layout and camera preview */
+        #camera-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin: 20px auto;
+        }
+
+        #camera {
+            width: 100%;
+            height: auto;
+            border: 1px solid #ccc;
+        }
+
+        #capture-button {
+            display: block;
+            margin: 10px auto;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #profile-picture-preview {
+            width: 100%;
+            max-width: 500px;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Register</h1>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="form-group">
+                {{ form.username.label_tag }}
+                {{ form.username }}
+            </div>
+            <div class="form-group">
+                {{ form.email.label_tag }}
+                {{ form.email }}
+            </div>
+            <div class="form-group">
+                {{ form.phone_number.label_tag }}
+                {{ form.phone_number }}
+            </div>
+            <div class="form-group">
+                {{ form.profile_picture.label_tag }}
+                {{ form.profile_picture }}
+            </div>
+            <div class="form-group">
+                {{ form.password1.label_tag }}
+                {{ form.password1 }}
+            </div>
+            <div class="form-group">
+                {{ form.password2.label_tag }}
+                {{ form.password2 }}
+            </div>
+
+            <div id="camera-container">
+                <video id="camera" autoplay></video>
+                <button type="button" id="capture-button">Capture</button>
+                <canvas id="canvas" style="display:none;"></canvas>
+                <img id="profile-picture-preview" src="" alt="Profile Picture Preview">
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Register">
+            </div>
+
+        </form>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const camera = document.getElementById('camera');
+                const captureButton = document.getElementById('capture-button');
+                const canvas = document.getElementById('canvas');
+                const profilePicturePreview = document.getElementById('profile-picture-preview');
+                const context = canvas.getContext('2d');
+                const form = document.querySelector('form');
+                const fileInput = document.querySelector('input[name="profile_picture"]');
+
+                // Access the user's camera
+                navigator.mediaDevices.getUserMedia({ video: true })
+                    .then(stream => {
+                        camera.srcObject = stream;
+                    })
+                    .catch(error => {
+                        console.error('Error accessing the camera: ', error);
+                    });
+
+                // Capture image when the button is clicked
+                captureButton.addEventListener('click', function () {
+                    const width = camera.videoWidth;
+                    const height = camera.videoHeight;
+                    canvas.width = width;
+                    canvas.height = height;
+                    context.drawImage(camera, 0, 0, width, height);
+                    const dataUrl = canvas.toDataURL('image/jpeg');
+                    profilePicturePreview.src = dataUrl;
+                    profilePicturePreview.style.display = 'block';
+
+                    // Convert the data URL to a file and set it to the file input
+                    fetch(dataUrl)
+                        .then(res => res.blob())
+                        .then(blob => {
+                            const file = new File([blob], 'profile_picture.jpg', { type: 'image/jpeg' });
+                            const dataTransfer = new DataTransfer();
+                            dataTransfer.items.add(file);
+                            fileInput.files = dataTransfer.files;
+                        })
+                        .catch(error => {
+                            console.error('Error converting data URL to file: ', error);
+                        });
+                });
+            });
+        </script>
+    </div>
+</body>
+
+</html>

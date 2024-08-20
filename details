@@ -1,0 +1,127 @@
+favour
+Goodevening1
+
+mary
+Thebeginnig34
+
+samuel
+Friendly34
+
+Simeon
+everythingispossible23
+
+Best
+itwillworknow2
+
+DB
+favour
+Favour_numjinic
+superuser
+superuser
+limerencebirthdays@gmail.com
+limerence
+
+<!-- 
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+        {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+    <h2>Welcome, {{ request.user.username }}</h2>
+    <p>Account Balance: ${{ account.balance }}</p>
+    <h3>Transaction History</h3>
+    <ul>
+        {% for transaction in transactions %}
+        <li>{{ transaction.transaction_type }}: ${{ transaction.amount }} on {{ transaction.timestamp }}</li>
+        {% endfor %}
+    </ul>
+</body>
+
+</html> -->
+
+<!-- <!DOCTYPE html>
+<html>
+
+<head>
+    <title>Login</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'styles.css' %}">
+</head>
+
+<body>
+    <h2>Login</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Login</button>
+    </form>
+</body>
+
+</html> -->
+
+
+
+<!-- <!DOCTYPE html>
+<html>
+
+<head>
+    <title>My Form</title>
+</head>
+
+<body>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Submit</button>
+    </form>
+</body>
+
+</html> -->
+
+<!-- 
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Facial Login</title>
+</head>
+
+<body>
+    <h1>Facial Recognition Login</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Login</button>
+    </form>
+</body>
+
+</html> -->
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+    <h2>Register</h2>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Register</button>
+    </form>
+</body>
+
+</html> -->

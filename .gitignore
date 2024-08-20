@@ -1,0 +1,61 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Django stuff:
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+media/
+
+# If you are using PostgreSQL
+*.pgsql
+
+# If you are using MySQL
+*.sql
+
+# If you are using SQLite
+*.sqlite3
+
+# Ignore the environment variables
+.env
+
+# Ignore the Google Cloud Vision API credentials file
+*.json
+
+# Ignore the virtual environment folder
+venv/
+env/
+
+# Ignore static files
+staticfiles/
+
+# Ignore files related to Django migrations
+migrations/
+
+# Ignore coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+
+# Ignore Jupyter Notebook checkpoints
+.ipynb_checkpoints
+
+# Ignore IDE settings directories
+.vscode/
+.idea/
+
+# Ignore compiled libraries
+*.so
+
+# Ignore macOS and Linux system files
+.DS_Store
+*.swp
+*.swo
